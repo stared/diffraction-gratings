@@ -1,0 +1,90 @@
+% by Piotr Migdal, 2008
+% http://migdal.wikidot.com/moire
+% pmigdal@tlen.pl
+
+% Feel free to edit
+
+/mm {2.835 mul} def
+
+/startx 0 mm def
+/starty 0 mm def
+/widthx 1 mm def
+/widthy 100 mm def
+
+/times 10 def
+/shift 2 mm def
+/chirp 0 mm def
+
+/label (costam) def
+
+% Square(startx, starty, widthx, widthy)
+/Square
+{
+startx starty moveto
+startx widthx add starty lineto
+startx widthx add starty widthy add lineto
+startx starty widthy add lineto
+closepath
+fill
+}
+def
+
+% Grating(times, shift, label, Square)
+/Grating
+{
+
+/tmp startx def
+
+/Courier findfont
+10 scalefont
+setfont
+startx starty 10 sub moveto
+label
+show
+
+times {
+/widthx shift 2 div def
+Square
+/shift shift chirp add def
+/startx startx shift add def
+} repeat
+
+/startx tmp def
+
+}
+def
+
+100 mm 5 mm translate
+	/Courier findfont
+	10 scalefont
+	setfont
+	0 0 10 sub moveto
+	(Piotr Migdal, http://migdal.wikidot.com/moire, 2008)
+	show
+-100 mm 0 mm translate
+
+10 0 mm translate
+
+/label (0.5+-0.1 mm, 400) def
+/times 400 def
+/shift 0.4 mm def
+/chirp 0.05 mm 0.01 mul def
+Grating
+
+/starty 110 mm def
+
+/label (0.5+-0.02 mm, 400) def
+/times 400 def
+/shift 0.48 mm def
+/chirp 0.01 mm 0.01 mul def
+Grating
+
+/starty 220 mm def
+
+/label (0.5+-0.005 mm, 400) def
+/times 400 def
+/shift 0.495 mm def
+/chirp 0.0025 mm 0.01 mul def
+Grating
+
+showpage

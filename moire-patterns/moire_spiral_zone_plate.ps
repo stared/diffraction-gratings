@@ -1,0 +1,157 @@
+% by Piotr Migdal, 2008
+% http://migdal.wikidot.com/moire
+% pmigdal@tlen.pl
+
+% Feel free to edit
+
+/mm {2.835 mul} def
+
+% SpiralPlateSimple(ptsperrot, zones, coeff)
+/SpiralPlateSimple
+{
+
+/angle 0 def
+/radius 0 def
+/angleincr 360 ptsperrot div def
+0 0 moveto
+
+ptsperrot zones mul {
+/radius angle sqrt coeff mul def
+radius angle cos mul radius angle sin mul lineto 
+/angle angle angleincr add def
+} repeat
+
+180 rotate
+/angle angle 180 add def
+
+ptsperrot zones mul ptsperrot 2 idiv add {
+/radius angle sqrt coeff mul def
+radius angle cos mul radius angle sin mul lineto 
+/angle angle angleincr sub def
+} repeat
+
+180 rotate
+
+closepath
+fill
+
+}
+def
+
+% SpiralPlatePart(phase, ptsperrot, zones, coeff)
+/SpiralPlatePart
+{
+
+/angle 0 def
+/radius 0 def
+/angleincr 360 ptsperrot div def
+0 0 moveto
+
+ptsperrot zones mul {
+/radius angle sqrt coeff mul def
+radius angle cos mul radius angle sin mul lineto 
+/angle angle angleincr add def
+} repeat
+
+-180 phase div rotate
+/angle angle 180 phase div add def
+
+ptsperrot zones mul ptsperrot 2 phase mul idiv add {
+/radius angle sqrt coeff mul def
+radius angle cos mul radius angle sin mul lineto 
+/angle angle angleincr sub def
+} repeat
+
+180 phase div rotate
+
+closepath
+fill
+
+}
+def
+
+% SpiralPlate(phase, ptsperrot, zones, coeff, SpiralPlatePart)
+/SpiralPlate
+{
+
+phase abs {
+SpiralPlatePart
+360 phase div rotate
+} repeat
+
+}
+def
+
+/blackCircle {0 360 arc
+	0 setgray
+	fill } def
+/whiteCircle {0 360 arc
+	1 setgray
+	fill } def
+
+/ZonePlate
+{
+/numberofZones zonesone 1 add 2 mul def
+/centralZonesize coeffone 360 sqrt mul 2 sqrt div def 
+
+/lastZone centralZonesize numberofZones sqrt mul def
+newpath
+
+1 2 numberofZones 1 sub {/currentZone exch def
+	/currentZone numberofZones currentZone sub def
+	currentZone sqrt centralZonesize mul
+	/whiteRadius exch def
+	0 0 whiteRadius whiteCircle
+	currentZone 1 sub
+	/currentZone exch def
+	currentZone sqrt centralZonesize mul
+	/blackRadius exch def
+	0 0 blackRadius blackCircle}for
+} def
+
+
+% coeff 2 focal lambda mul mul sqrt
+% typical lambda is 0.5 um
+% focal 10 mm gives coeff 0.1
+
+100 mm 5 mm translate
+	/Courier findfont
+	10 scalefont
+	setfont
+	0 0 10 sub moveto
+	(Piotr Migdal, http://migdal.wikidot.com/moire, 2008)
+	show
+-100 mm 0 mm translate
+
+/ptsperrot 400 def
+
+55 mm 45 mm translate
+
+/zonesone 50 def
+/coeffone 1 def
+/ind 1 def
+
+ZonePlate
+0 99 mm translate
+
+2 {
+/phase ind def
+/zones zonesone ind idiv def
+/coeff coeffone ind sqrt mul def
+SpiralPlate
+0 97 mm translate
+/ind ind 1 add def
+} repeat
+
+100 mm -291 mm translate
+
+3 {
+/phase ind def
+/zones zonesone ind idiv def
+/coeff coeffone ind sqrt mul def
+SpiralPlate
+0 97 mm translate
+/ind ind 1 add def
+} repeat
+
+showpage

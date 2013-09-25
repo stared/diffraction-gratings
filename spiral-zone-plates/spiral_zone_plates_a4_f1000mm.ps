@@ -1,0 +1,314 @@
+/mm {2.835 mul} def
+
+% SpiralPlateSimple(ptsperrot, zones, coeff)
+/SpiralPlateSimple
+{
+
+/angle 0 def
+/radius 0 def
+/angleincr 360 ptsperrot div def
+0 0 moveto
+
+ptsperrot zones mul {
+/radius angle sqrt coeff mul def
+radius angle cos mul radius angle sin mul lineto 
+/angle angle angleincr add def
+} repeat
+
+180 rotate
+/angle angle 180 add def
+
+ptsperrot zones mul ptsperrot 2 idiv add {
+/radius angle sqrt coeff mul def
+radius angle cos mul radius angle sin mul lineto 
+/angle angle angleincr sub def
+} repeat
+
+180 rotate
+
+closepath
+fill
+
+}
+def
+
+% SpiralPlatePart(phase, ptsperrot, zones, coeff)
+/SpiralPlatePart
+{
+
+/angle 0 def
+/radius 0 def
+/angleincr 360 ptsperrot div def
+0 0 moveto
+
+ptsperrot zones mul {
+/radius angle sqrt coeff mul def
+radius angle cos mul radius angle sin mul lineto 
+/angle angle angleincr add def
+} repeat
+
+-180 phase div rotate
+/angle angle 180 phase div add def
+
+ptsperrot zones mul ptsperrot 2 phase mul idiv add {
+/radius angle sqrt coeff mul def
+radius angle cos mul radius angle sin mul lineto 
+/angle angle angleincr sub def
+} repeat
+
+180 phase div rotate
+
+closepath
+fill
+
+}
+def
+
+% SpiralPlate(phase, ptsperrot, zones, coeff, SpiralPlatePart)
+/SpiralPlate
+{
+
+phase abs {
+SpiralPlatePart
+360 phase div rotate
+} repeat
+
+}
+def
+
+% coeff 10 corresponds to r(\phi=2\pi)=~67.06 mm
+% and that r = \sqrt{2\lambda f}, where f - major focal length
+% lambda is a wavelength (in nm) - in our case 632 nm
+% corresponds to major focal length f = 3557.8 m
+% coeff is proportional to r
+% if one wants to prepare SZPs with the same f, then coeff must be changed
+% coeff(p) = coeff(p=1) * sqrt{p}, where p - number of arms
+
+
+
+newpath
+10 mm 8 moveto
+160 mm 8 lineto
+160 mm 12 lineto
+10 mm 12 lineto
+closepath
+fill
+
+/Arial findfont 8 scalefont setfont
+170 mm 7 moveto
+/label (150 mm) def
+label show
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+/inch {72 mul} def
+/cm {28.35 mul} def
+/mm {2.835 mul} def
+/blackCircle {0 0 CurrentRadius mm 0 360 arc
+	0 setgray
+	fill } def
+/whiteCircle {0 0 CurrentRadius mm 0 360 arc
+	1 setgray
+	fill } def
+
+
+/ZonePlate
+{
+
+/centralZonesize 0.000632 focal mul sqrt def 
+
+newpath
+/indexx xzones 1 add def
+1 xzones add{
+	/CurrentRadius centralZonesize indexx 2 mul sqrt mul def
+	%CurrentRadius is in mm - we have to convert it into pts!!
+	%it is converted in functions white & black Circle!!
+	whiteCircle
+	/indexx indexx 1 sub def
+	/CurrentRadius centralZonesize 1 2 indexx mul add sqrt mul def
+	blackCircle}repeat
+0 setgray
+}def
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+/FinalProcedure
+{
+/xzones 500000 rmax rmax lambda focal mul div mul mul cvi def
+/xcoeff focal 35578 div sqrt def
+
+/ind -1 def
+/index 1 def
+
+-20 0 moveto
+info show
+
+
+/distance 10 rmax add mm def
+0 2 distance mul translate
+
+%%%
+ZonePlate
+%%%
+
+number {
+0 2 distance mul translate
+
+/coeff xcoeff index sqrt mul def
+/zones 1 xzones index div cvi add def
+% # zones is floor()+1
+
+/phase ind def
+SpiralPlate
+
+%drawing white rings at the boundaries of SZPs
+
+/negative distance neg def
+newpath
+0 0 rmax mm 0 190 arc
+negative 0 lineto
+0 0 distance 180 350 arcn
+closepath
+1 setgray fill
+newpath
+0 0 rmax mm 0 170 arcn
+negative 0 lineto
+0 0 distance 180 10 arc
+closepath
+1 setgray fill
+
+%%%%%%%%%%%%%%%%%%%%%
+
+0 setgray
+
+
+
+
+
+
+/ind ind 1 sub def
+/index index 1 add def
+} repeat
+
+}
+def
+
+
+
+
+
+
+20 mm 10 mm translate
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%modify only the following part of the program
+%don't change previous stuff
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+/focal 1000 def
+%focal in mm
+/rmax 2 def
+% rmax in mm
+/ptsperrot 300 def
+/lambda 632 def
+%lambda in nm
+/number 9 def
+/info (f=1000 rmax=2) def
+
+FinalProcedure
+
+40 mm -2 distance number 1 add mul mul translate
+
+
+%%%%
+
+
+
+/focal 1000 def
+%focal in mm
+/rmax 4 def
+% rmax in mm
+/ptsperrot 300 def
+/lambda 632 def
+%lambda in nm
+/number 8 def
+/info (f=1000 rmax=4) def
+
+FinalProcedure
+
+40 mm -2 distance number 1 add mul mul translate
+
+
+%%%%
+
+
+/focal 1000 def
+%focal in mm
+/rmax 6 def
+% rmax in mm
+/ptsperrot 300 def
+/lambda 632 def
+%lambda in nm
+/number 7 def
+/info (f=1000 rmax=6) def
+
+FinalProcedure
+
+40 mm -2 distance number 1 add mul mul translate
+
+
+%%%%
+
+
+/focal 1000 def
+%focal in mm
+/rmax 9 def
+% rmax in mm
+/ptsperrot 300 def
+/lambda 632 def
+%lambda in nm
+/number 6 def
+/info (f=1000 rmax=9) def
+
+FinalProcedure
+
+40 mm -2 distance number 1 add mul mul translate
+
+
+%%%%
+
+
+/focal 1000 def
+%focal in mm
+/rmax 12 def
+% rmax in mm
+/ptsperrot 300 def
+/lambda 632 def
+%lambda in nm
+/number 5 def
+/info (f=1000 rmax=12) def
+
+FinalProcedure
+
+40 mm -2 distance number 1 add mul mul translate
+
+
+%%%%
+
+
+
+
+showpage

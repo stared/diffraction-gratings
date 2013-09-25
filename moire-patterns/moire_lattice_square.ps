@@ -1,0 +1,96 @@
+% by Piotr Migdal, 2008
+% http://migdal.wikidot.com/moire
+% pmigdal@tlen.pl
+
+% Feel free to edit
+
+/mm {2.835 mul} def
+
+/radius 0.2 mm def
+/spacingX 0.5 mm def
+/spacingY 0.5 mm def
+
+/timesX 200 def
+/timesY 200 def
+
+/Lattice{
+	/indX 0 def
+	timesX{
+		/indY 0 def
+		timesY{
+			spacingX indX mul spacingY indY mul radius 0 360 arc
+			fill
+			/indY indY 1 add def
+		} repeat
+		/indX indX 1 add def
+	} repeat
+} def
+
+/Write{
+	/Courier findfont
+	10 scalefont
+	setfont
+	0 0 10 sub moveto
+	label
+	show
+} def
+
+100 mm 5 mm translate
+/label (Piotr Migdal, http://migdal.wikidot.com/moire, 2008) def
+Write
+-100 mm 0 mm translate
+
+0 mm 10 mm translate
+
+/radius 0.1 mm def
+/spacingX 0.5 mm def
+/spacingY 0.5 mm def
+/timesX 200 def
+/timesY 200 def
+/label (r=0.1 mm, d=0.5 mm, 200x200) def
+Write
+Lattice
+
+105 mm 0 mm translate
+
+/radius 0.105 mm def
+/spacingX 0.525 mm def
+/spacingY 0.525 mm def
+/timesX 200 def
+/timesY 200 def
+/label (r=0.105 mm, d=0.525 mm, 200x200) def
+Write
+Lattice
+
+-105 mm 110 mm translate
+
+/radius 0.4 mm def
+/spacingX 1 mm def
+/spacingY 1 mm def
+/timesX 100 def
+/timesY 100 def
+/label (r=0.4 mm, d=1 mm, 100x100) def
+Write
+Lattice
+
+105 mm 0 translate
+/radius 0.2 mm def
+/spacingX 1 mm def
+/spacingY 1 mm def
+/timesX 100 def
+/timesY 100 def
+/label (r=0.2 mm, d=1 mm, 100x100) def
+Write
+Lattice
+
+-100 mm 110 mm translate
+/radius 0.1 mm def
+/spacingX 1 mm def
+/spacingY 1 mm def
+/timesX 210 def
+/timesY 60 def
+/label (r=0.1 mm, d=1 mm, 210x60) def
+Write
+Lattice
+
+showpage

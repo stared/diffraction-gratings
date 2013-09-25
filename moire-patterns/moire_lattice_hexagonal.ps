@@ -1,0 +1,83 @@
+% by Piotr Migdal, 2008
+% http://migdal.wikidot.com/moire
+% pmigdal@tlen.pl
+
+% Feel free to edit
+
+/mm {2.835 mul} def
+
+/radius 0.2 mm def
+/const 0.5 mm def
+
+/timesX 200 def
+/timesY 200 def
+
+/leter (A) def
+
+/Lattice{
+	/indX 0 def
+	timesX{
+		/indY 0 def
+		timesY{
+			spacingX indX mul spacingY indY mul radius 0 360 arc
+			fill
+			/indY indY 1 add def
+		} repeat
+		/indX indX 1 add def
+	} repeat
+} def
+
+/LatticeHex{
+	/spacingX const def
+	/spacingY 3 sqrt const mul def
+	Lattice
+	const 2 div 3 sqrt const mul 2 div translate
+	Lattice
+	0 const 2 div 3 sqrt sub 0 const mul 2 div sub translate
+} def
+
+/Write{
+	/Courier findfont
+	10 scalefont
+	setfont
+	0 0 10 sub moveto
+	label
+	show
+} def
+
+100 mm 5 mm translate
+/label (Piotr Migdal, http://migdal.wikidot.com/moire, 2008) def
+Write
+-100 mm 0 mm translate
+
+10 mm 10 mm translate
+
+/radius 0.1 mm def
+/const 0.5 mm def
+/timesX 175 def
+/timesY 100 def
+/label (r = 0.1 mm, d = 0.5 mm, 175x100) def
+Write
+LatticeHex
+
+100 mm 0 mm translate
+
+/radius 0.102 mm def
+/const 0.51 mm def
+/timesX 175 def
+/timesY 100 def
+/label (r = 0.102 mm, d = 0.51 mm, 175x100) def
+Write
+LatticeHex
+
+-100 mm 95 mm translate
+
+/radius 0.4 mm def
+/const 2 mm def
+/timesX 95 def
+/timesY 53 def
+/label (r = 0.4 mm, d = 2 mm, 200x100) def
+Write
+LatticeHex
+
+showpage
